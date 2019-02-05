@@ -2,6 +2,7 @@
 *.class
 
 # IntelliJ
+.idea/
 out/
 
 # Ant
