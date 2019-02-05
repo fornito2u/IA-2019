@@ -1,6 +1,6 @@
-package Vue;
+package vue;
 
-import Modele.Jeu;
+import modele.Jeu;
 
 import java.util.Observable;
 import java.util.Observer;

@@ -1,10 +1,10 @@
-package Main;
+package main;
 
-import Modele.Humain;
-import Modele.IA;
-import Modele.Jeu;
-import Modele.Joueur;
-import Vue.VueGrille;
+import modele.Humain;
+import modele.IA;
+import modele.Jeu;
+import modele.Joueur;
+import vue.VueGrille;
 import java.util.Scanner;
 
 public class Main
