@@ -5,15 +5,33 @@ import Modele.IA;
 import Modele.Jeu;
 import Modele.Joueur;
 import Vue.VueGrille;
+import java.util.Scanner;
 
 public class Main
 {
     public static void main(String [] args)
     {
-        Joueur j1 = new Humain();
-        Joueur j2 = new IA();
-        Jeu jeu = new Jeu(j1, j2);
-        VueGrille grilledeJeu = new VueGrille(jeu);
-        jeu.addObserver(grilledeJeu);
+        Jeu jeu = new Jeu();
+        Scanner sc = new Scanner(System.in);
+        int nbJoueurHumain;
+        System.out.println("Combien de joueur humain voulez-vous ? Choisir un nombre entre 0 et 2 inclus");
+        nbJoueurHumain = sc.nextInt();
+        while(nbJoueurHumain < 0 || nbJoueurHumain > 2)
+        {
+            System.out.println("Le nombre entré est invalide. Combien de joueur humain voulez-vous ?");
+            nbJoueurHumain = sc.nextInt();
+        }
+        for(int i = 1; i <= nbJoueurHumain; i++)
+        {
+            Joueur j1 = new Humain(i);
+            jeu.ajoutJoueur(j1);
+        }
+        for(int j = 0; j < 2-nbJoueurHumain; j++)
+        {
+            Joueur j2 = new IA(j+1);
+            jeu.ajoutJoueur(j2);
+        }
+        VueGrille grilleDeJeu = new VueGrille(jeu);
+        jeu.addObserver(grilleDeJeu);
     }
 }

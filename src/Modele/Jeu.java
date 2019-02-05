@@ -10,7 +10,7 @@ public class Jeu extends Observable
     private Joueur[] listeJoueurs;
     private int nbTour;
 
-    public Jeu(Joueur joueur1, Joueur joueur2)
+    public Jeu()
     {
         this.grilleDeJeu = new int[7][6];
         for(int i = 0; i < 7; i++)
@@ -21,9 +21,18 @@ public class Jeu extends Observable
             }
         }
         this.listeJoueurs = new Joueur[2];
-        this.listeJoueurs[0] = joueur1;
-        this.listeJoueurs[1] = joueur2;
         this.nbTour = 0;
+    }
+
+    public void ajoutJoueur(Joueur joueur)
+    {
+        for(int i = 0; i < 2 ; i++)
+        {
+            if(this.listeJoueurs[i] == null)
+            {
+                this.listeJoueurs[i] = joueur;
+            }
+        }
     }
 
     public void update()

@@ -4,9 +4,9 @@ public class IA implements Joueur
 {
     private int id;
 
-    public IA()
+    public IA(int id)
     {
-        this.id = 2;
+        this.id = id;
     }
 
     @Override

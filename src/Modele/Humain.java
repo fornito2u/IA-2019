@@ -4,9 +4,9 @@ public class Humain implements Joueur
 {
     private int id;
 
-    public Humain()
+    public Humain(int id)
     {
-        this.id = 1;
+        this.id = id;
     }
 
     @Override
