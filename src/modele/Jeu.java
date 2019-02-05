@@ -31,6 +31,7 @@ public class Jeu extends Observable
             if(this.listeJoueurs[i] == null)
             {
                 this.listeJoueurs[i] = joueur;
+                return;
             }
         }
     }

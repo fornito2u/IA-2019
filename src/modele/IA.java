@@ -1,17 +1,22 @@
 package modele;
 
-public class IA implements Joueur
+public class IA extends Joueur
 {
-    private int id;
-
-    public IA(int id)
+    public IA()
     {
-        this.id = id;
+        super();
     }
 
     @Override
     public void jouer()
     {
 
+    }
+
+    @Override
+    public String toString() {
+        return "IA{" +
+                "id=" + id +
+                '}';
     }
 }

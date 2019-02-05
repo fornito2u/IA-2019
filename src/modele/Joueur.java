@@ -1,6 +1,17 @@
 package modele;
 
-public interface Joueur
+public class Joueur
 {
-    public void jouer();
+    protected int id;
+    private static int idGlobale = 1;
+
+    public Joueur () {
+        this.id=idGlobale;
+        idGlobale++;
+    }
+
+
+    public void jouer() {
+
+    }
 }

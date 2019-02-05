@@ -1,17 +1,23 @@
 package modele;
 
-public class Humain implements Joueur
+public class Humain extends Joueur
 {
-    private int id;
 
-    public Humain(int id)
+    public Humain()
     {
-        this.id = id;
+        super();
     }
 
     @Override
     public void jouer()
     {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Humain{" +
+                "id=" + id +
+                '}';
     }
 }

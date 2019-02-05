@@ -26,16 +26,23 @@ public class Main
         }
         for(int i = 1; i <= nbJoueurHumain; i++)
         {
-            Joueur j1 = new Humain(i);
+            Joueur j1 = new Humain();
             jeu.ajoutJoueur(j1);
         }
         for(int j = 0; j < 2-nbJoueurHumain; j++)
         {
-            Joueur j2 = new IA(j+1);
+            Joueur j2 = new IA();
             jeu.ajoutJoueur(j2);
         }
         VueGrille grilleDeJeu = new VueGrille(jeu);
         jeu.addObserver(grilleDeJeu);
+
+
+        Joueur[] listeJoueurs=jeu.getListeJoueurs();
+        for(int i = 0; i < 2; i++)
+        {
+            System.out.println(listeJoueurs[i]);
+        }
         testGraphique();
     }
 
