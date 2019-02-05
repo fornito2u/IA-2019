@@ -5,6 +5,9 @@ import modele.IA;
 import modele.Jeu;
 import modele.Joueur;
 import vue.VueGrille;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.Scanner;
 
 public class Main
@@ -33,5 +36,21 @@ public class Main
         }
         VueGrille grilleDeJeu = new VueGrille(jeu);
         jeu.addObserver(grilleDeJeu);
+        testGraphique();
+    }
+
+    private static void testGraphique() {
+        JFrame frame = new JFrame("Puissance 4");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        int longueur=4;
+        int largeur=4;
+        GridLayout gridLayout=new GridLayout(longueur,largeur);
+        JPanel panelJeu=new JPanel(gridLayout);
+        for (int i=0;i<longueur*largeur;i++) {
+            panelJeu.add(new JButton(""+i));
+        }
+        frame.add(panelJeu);
+        frame.pack();
+        frame.setVisible(true);
     }
 }
