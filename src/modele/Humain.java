@@ -1,17 +1,9 @@
 package modele;
 
-public class Humain extends Joueur
-{
+public class Humain extends Joueur {
 
-    public Humain()
-    {
+    public Humain() {
         super();
-    }
-
-    @Override
-    public void jouer()
-    {
-
     }
 
     @Override

@@ -3,52 +3,35 @@ package modele;
 import java.util.Arrays;
 import java.util.Observable;
 
-public class Jeu extends Observable
-{
-    // Grille du jeu, 0 la lace est vide, 1 la case appartient au joueur1, 2 la case appartient au joueur2
-    private int[][] grilleDeJeu;
+public class Jeu extends Observable {
+    /**
+     * Etat en cours du jeu (Grille du jeu, 0 la case est vide, 1 la case appartient au joueur1, 2 la case appartient au joueur2)
+     */
+    private Etat etat;
     private Joueur[] listeJoueurs;
     private int nbTour;
 
-    public Jeu()
-    {
-        this.grilleDeJeu = new int[7][6];
-        for(int i = 0; i < 7; i++)
-        {
-            for(int j = 0; j < 6; j++)
-            {
-                this.grilleDeJeu[i][j] = 0;
-            }
-        }
+    public Jeu() {
+        this.etat = new Etat(4,5,(byte)1);
         this.listeJoueurs = new Joueur[2];
         this.nbTour = 0;
     }
 
-    public void ajoutJoueur(Joueur joueur)
-    {
-        for(int i = 0; i < 2 ; i++)
-        {
-            if(this.listeJoueurs[i] == null)
-            {
+    public void ajoutJoueur(Joueur joueur) {
+        for(int i = 0; i < 2 ; i++) {
+            if(this.listeJoueurs[i] == null) {
                 this.listeJoueurs[i] = joueur;
                 return;
             }
         }
     }
 
-    public void update()
-    {
-        notifyObservers();
+    public Etat getEtat() {
+        return etat;
     }
 
-    public void setGrilleDeJeu(int[][] grilleDeJeu)
-    {
-        this.grilleDeJeu = grilleDeJeu;
-    }
-
-    public int[][] getGrilleDeJeu()
-    {
-        return grilleDeJeu;
+    public void setEtat(Etat etat) {
+        this.etat = etat;
     }
 
     public void setListeJoueurs(Joueur[] listeJoueurs)
@@ -74,10 +57,10 @@ public class Jeu extends Observable
     @Override
     public String toString()
     {
-        return "Jeu{" +
-                "grilleDeJeu=" + Arrays.toString(grilleDeJeu) +
-                ", listeJoueurs=" + Arrays.toString(listeJoueurs) +
-                ", nbTour=" + nbTour +
-                '}';
+        return "Jeu\n{\n" +
+                "grilleDeJeu=\n" + etat.toString() +
+                "listeJoueurs=" + Arrays.toString(listeJoueurs) +
+                "\nnbTour=" + nbTour +
+                "\n}";
     }
 }

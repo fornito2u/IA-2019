@@ -9,9 +9,4 @@ public class Joueur
         this.id=idGlobale;
         idGlobale++;
     }
-
-
-    public void jouer() {
-
-    }
 }

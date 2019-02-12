@@ -1,16 +1,8 @@
 package modele;
 
-public class IA extends Joueur
-{
-    public IA()
-    {
+public class IA extends Joueur {
+    public IA() {
         super();
-    }
-
-    @Override
-    public void jouer()
-    {
-
     }
 
     @Override
