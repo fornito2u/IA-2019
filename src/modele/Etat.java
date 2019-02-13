@@ -41,6 +41,10 @@ public class Etat extends Observable {
         return tableau;
     }
 
+    public byte getJoueur() {
+        return joueur;
+    }
+
     /**
      * Joue un coup si il est possible et retourne true sinon retourne false
      * @param c Le coup (ligne et colonne)
