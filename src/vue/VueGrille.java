@@ -56,6 +56,14 @@ public class VueGrille extends JPanel implements Observer {
         this.add(conteneurPanel);
     }
 
+    public void finPartie() {
+        for (int i=0;i<grilleBouton.length;i++) {
+            for (int j=0;j<grilleBouton[0].length;j++) {
+                this.grilleBouton[i][j].removeActionListener(this.grilleBouton[i][j].getActionListeners()[0]);
+            }
+        }
+    }
+
     public void miseAJourJLabel(byte joueur) {
         if (joueur == 1) {
             this.infoLabel.setText("Pikachu doit jouer");
@@ -79,5 +87,16 @@ public class VueGrille extends JPanel implements Observer {
             }
         }
         this.miseAJourJLabel(etat.getJoueur());
+        int testFin=etat.testFin();
+        if (testFin != Etat.PARTIE_EN_COURS) {
+            if (testFin == Etat.J1_GAGNE) {
+                this.infoLabel.setText("Pikachu a gagné");
+            } else if (testFin == Etat.J2_GAGNE) {
+                this.infoLabel.setText("Rondoudou a gagné");
+            } else {
+                this.infoLabel.setText("Match nul");
+            }
+            finPartie();
+        }
     }
 }

@@ -11,6 +11,10 @@ public class Coup {
         this.colonne=c;
     }
 
+    public Coup (Coup c) {
+        this.colonne=c.getColonne();
+    }
+
     public int getColonne() {
         return colonne;
     }
