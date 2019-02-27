@@ -1,7 +1,6 @@
 package modele;
 
-public class Joueur
-{
+public abstract class Joueur {
     protected int id;
     private static int idGlobale = 1;
 
@@ -9,4 +8,6 @@ public class Joueur
         this.id=idGlobale;
         idGlobale++;
     }
+
+    public abstract void jouer(Jeu jeu);
 }

@@ -28,23 +28,24 @@ public class Main {
             jeu.ajoutJoueur(j2);
         }
 
+        jeu.setNbJoueurHumains(nbJoueurHumain);
         Etat etatInitial=new Etat(6,6,(byte)1);
-        VueGrille grilleDeJeu = new VueGrille(etatInitial);
+        VueGrille grilleDeJeu = new VueGrille(etatInitial,jeu);
 
         etatInitial.addObserver(grilleDeJeu);
         testGraphique(grilleDeJeu);
     }
 
     public static int selectionJoueur() {
-        String messageSelection="Combien de joueur humain voulez-vous (0-2) ?";
+        String messageSelection="Combien de joueur humain voulez-vous (1-2) ?";
         String entreeInvalide="Entrée invalide";
-        String messageInvalide="Choisir un nombre entre 0 et 2 inclus";
+        String messageInvalide="Choisir un nombre entre 1 et 2 inclus";
         while(true) {
             int nbJoueurHumain=1;
             String nbJoueurHumainString=JOptionPane.showInputDialog(messageSelection,nbJoueurHumain);
             try {
                 nbJoueurHumain=Integer.parseInt(nbJoueurHumainString);
-                if (nbJoueurHumain >= 0 || nbJoueurHumain <= 2) {
+                if (nbJoueurHumain >= 1 || nbJoueurHumain <= 2) {
                     return nbJoueurHumain;
                 }
             } catch (NumberFormatException e) {

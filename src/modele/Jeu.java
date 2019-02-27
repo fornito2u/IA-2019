@@ -1,18 +1,19 @@
 package modele;
 
+import vue.VueGrille;
+
 import java.util.Arrays;
 import java.util.Observable;
 
 public class Jeu extends Observable {
-    /**
-     * Etat en cours du jeu (Grille du jeu, 0 la case est vide, 1 la case appartient au joueur1, 2 la case appartient au joueur2)
-     */
-    private Etat etat;
+
+    private VueGrille grille;
     private Joueur[] listeJoueurs;
     private int nbTour;
 
+    private int nbJoueurHumains;
+
     public Jeu() {
-        this.etat = new Etat(4,5,(byte)1);
         this.listeJoueurs = new Joueur[2];
         this.nbTour = 0;
     }
@@ -26,12 +27,20 @@ public class Jeu extends Observable {
         }
     }
 
-    public Etat getEtat() {
-        return etat;
+    public int getNbJoueurHumains() {
+        return nbJoueurHumains;
     }
 
-    public void setEtat(Etat etat) {
-        this.etat = etat;
+    public void setNbJoueurHumains(int nbJoueurHumains) {
+        this.nbJoueurHumains = nbJoueurHumains;
+    }
+
+    public void setGrille(VueGrille grille) {
+        this.grille = grille;
+    }
+
+    public VueGrille getGrille() {
+        return grille;
     }
 
     public void setListeJoueurs(Joueur[] listeJoueurs)
@@ -58,7 +67,6 @@ public class Jeu extends Observable {
     public String toString()
     {
         return "Jeu\n{\n" +
-                "grilleDeJeu=\n" + etat.toString() +
                 "listeJoueurs=" + Arrays.toString(listeJoueurs) +
                 "\nnbTour=" + nbTour +
                 "\n}";

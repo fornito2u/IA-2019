@@ -2,6 +2,7 @@ package vue;
 
 import controleur.BoutonControleur;
 import modele.Etat;
+import modele.Jeu;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -10,6 +11,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class VueGrille extends JPanel implements Observer {
+
+    private Jeu jeu;
     private Etat etat;
     private JButton[][] grilleBouton;
     private JPanel conteneurPanel;
@@ -20,8 +23,10 @@ public class VueGrille extends JPanel implements Observer {
     //public static final Dimension espaceInfos=new Dimension(0,10);
     public static final Color specialBlue=new Color(100, 135, 255);
 
-    public VueGrille(Etat etatInitial) {
+    public VueGrille(Etat etatInitial, Jeu jeu) {
         super();
+        this.jeu=jeu;
+        jeu.setGrille(this);
         this.etat = etatInitial;
         byte[][] tableau=etat.getTableau();
         this.grilleBouton = new JButton[tableau.length][tableau[0].length];
@@ -44,7 +49,7 @@ public class VueGrille extends JPanel implements Observer {
                 this.grilleBouton[i][j].setPreferredSize(new Dimension(100, 100));
                 this.grilleBouton[i][j].setBorder(new LineBorder(Color.BLACK,2));
                 this.grilleBouton[i][j].setBackground(specialBlue);
-                this.grilleBouton[i][j].addActionListener(new BoutonControleur(etat, j));
+                this.grilleBouton[i][j].addActionListener(new BoutonControleur(etat, j,this.jeu));
                 grillePanel.add(this.grilleBouton[i][j]);
             }
         }
@@ -54,6 +59,10 @@ public class VueGrille extends JPanel implements Observer {
         //conteneurPanel.add(Box.createRigidArea(espaceInfos));
         conteneurPanel.add(grillePanel);
         this.add(conteneurPanel);
+    }
+
+    public Etat getEtat() {
+        return etat;
     }
 
     public void finPartie() {
@@ -97,6 +106,14 @@ public class VueGrille extends JPanel implements Observer {
                 this.infoLabel.setText("Match nul");
             }
             finPartie();
+        } else {
+            //Si c'est 1 IA 1 joueur
+            if (jeu.getNbJoueurHumains() == 1) {
+                //Si c'est à L'IA de jouer
+                if (this.etat.getJoueur() == 2) {
+                    (jeu.getListeJoueurs()[1]).jouer(jeu);
+                }
+            }
         }
     }
 }

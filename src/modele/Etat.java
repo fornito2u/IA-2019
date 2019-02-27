@@ -95,7 +95,25 @@ public class Etat extends Observable {
      * Liste tous les coups possibles de l'état actuel
      * @return Une ArrayList avec tous les coups possibles de l'état actuel
      */
-    public ArrayList<Etat> coupsPossibles() {
+    public ArrayList<Coup> coupsPossibles() {
+        ArrayList<Coup> tableauCoups=new ArrayList<Coup>();
+        //On essaye de jouer un coup sur chaque colonne et on retourne les états possibles
+        for (int i=0;i<this.tableau[0].length;i++) {
+            Etat etatCopie=new Etat(this);
+            Coup coupI=new Coup(i);
+            boolean coupPossible=etatCopie.jouerCoup(coupI);
+            if (coupPossible) {
+                tableauCoups.add(coupI);
+            }
+        }
+        return tableauCoups;
+    }
+
+    /**
+     * Liste tous les etat possibles de l'état actuel
+     * @return Une ArrayList avec tous les etat possibles de l'état actuel
+     */
+    public ArrayList<Etat> etatPossibles() {
         ArrayList<Etat> tableauEtat=new ArrayList<Etat>();
         //On essaye de jouer un coup sur chaque colonne et on retourne les états possibles
         for (int i=0;i<this.tableau[0].length;i++) {

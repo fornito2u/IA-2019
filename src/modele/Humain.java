@@ -7,9 +7,15 @@ public class Humain extends Joueur {
     }
 
     @Override
+    public void jouer(Jeu jeu) {
+
+    }
+
+    @Override
     public String toString() {
         return "Humain{" +
                 "id=" + id +
                 '}';
     }
+
 }
