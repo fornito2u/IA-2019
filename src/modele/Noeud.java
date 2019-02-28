@@ -25,10 +25,15 @@ public class Noeud {
         this.nbVictoires = 0;
         this.nbSimulation = 0;
         enfant = new ArrayList<>();
-
     }
 
+    // return un int correspondant
+    // Etat.J1_GAGNE
+    // Etat.J2_GAGNE
+    // Etat.MATCH_NUL
+    /*public int simulation() {
 
+    }*/
 
     //Est-ce un noeud joueur ou un noeud IA ?
     //true joueur
