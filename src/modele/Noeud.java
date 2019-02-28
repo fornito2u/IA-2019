@@ -25,6 +25,7 @@ public class Noeud {
         this.nbVictoires = 0;
         this.nbSimulation = 0;
         enfant = new ArrayList<>();
+
     }
 
 
