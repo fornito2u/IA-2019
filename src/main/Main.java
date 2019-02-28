@@ -45,7 +45,7 @@ public class Main {
             String nbJoueurHumainString=JOptionPane.showInputDialog(messageSelection,nbJoueurHumain);
             try {
                 nbJoueurHumain=Integer.parseInt(nbJoueurHumainString);
-                if (nbJoueurHumain >= 1 || nbJoueurHumain <= 2) {
+                if (nbJoueurHumain >= 1 && nbJoueurHumain <= 2) {
                     return nbJoueurHumain;
                 }
             } catch (NumberFormatException e) {
