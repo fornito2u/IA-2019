@@ -27,6 +27,7 @@ public class Noeud {
         enfant = new ArrayList<>();
     }
 
+
     // return un int correspondant
     // Etat.J1_GAGNE
     // Etat.J2_GAGNE
