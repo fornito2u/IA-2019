@@ -156,15 +156,19 @@ public class Noeud {
     // Etape 4 : Backpropagation
     // Utilise le résultat de la simulation effectué au préalable pour mettre à jour les attributs nbVictoire et nbParties
     // du noeud courant et des noeuds entre la racine et le noeud courant.
-    // Le Noeud Courant correspond au noeud feuille sur lequel on a effectué la simulation.
+    // Le noeud courant correspond au noeud feuille sur lequel on a effectué la simulation.
+    // Pour nbParties : Le noeud courant et les noeuds de la racine au noeud courant augment leur attribut nbParties de +1
+    // Pour nbVictoires il y a deux cas:
+    //    - Si le noeud courant gagne, les noeuds du même type au noeud courant (même jeton sur le plateau) ont leur attributs nbVictoires augmenté
+    //    - Si le noeud courant perd, les noeuds du type opposé au noeud courant (jeton opposé sur le plateau) ont leur attributs nbVictoires augmenté
     public void backPropagation(int resultatSimulation){
 
+        // Partie 1 : Mettre à jour pour le noeud courant les attributs nbParties et nbVictoires
 
-        //true noeud humain
-        //false noeud IA
+        //true noeud du bas gagnant
+        //false noeud du bas perdant
         boolean noeudDuBasGagnant=false;
 
-        // Partie 1 : Mettre à jour pour le noeud courant les attributs nbParties et nbVictoires
         this.nbParties += 1;
         if(resultatSimulation == Etat.J1_GAGNE && this.estNoeudHumain())
         {
@@ -174,11 +178,9 @@ public class Noeud {
             this.nbVictoires += 1;
             noeudDuBasGagnant=true;
         }
+        System.out.println("Etape 4 - Backpropagation - Partie 1 : Done");
 
-
-
-        // Partie 2 : Mettre à jour pour tous les noeuds entre la racine et le noeud courant
-        // les attributs nbParties et nbVictoires
+        // Partie 2 : Mettre à jour pour tous les noeuds entre la racine et le noeud courant les attributs nbParties et nbVictoires
 
         Noeud noeudCourant=this;
 
@@ -198,6 +200,7 @@ public class Noeud {
                 noeudCourant.setNbVictoires(noeudCourant.getNbVictoires()+1);
             }
         }
+        System.out.println("Etape 4 - Backpropagation - Partie 2 : Done");
 
 
     }

@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String [] args) {
-        /*Jeu jeu = new Jeu();
+        Jeu jeu = new Jeu();
         int nbJoueurHumain=selectionJoueur();
         for(int i = 1; i <= nbJoueurHumain; i++) {
             Joueur j1 = new Humain();
@@ -33,8 +33,8 @@ public class Main {
         VueGrille grilleDeJeu = new VueGrille(etatInitial,jeu);
 
         etatInitial.addObserver(grilleDeJeu);
-        testGraphique(grilleDeJeu);*/
-        testSimulation();
+        testGraphique(grilleDeJeu);
+        //testBackPropagation();
     }
 
     public static int selectionJoueur() {
@@ -74,8 +74,6 @@ public class Main {
     /*private static void testSelection() {
         Etat etatInitial=new Etat(3,3,(byte)1);
 
-        //etatInitial.jouerCoup(new Coup(0));
-
         Noeud noeudRacineArbre = new Noeud(etatInitial);
         noeudRacineArbre.setUctTemp(1);
         Noeud fils1=new Noeud (noeudRacineArbre,new Coup(0));
@@ -94,8 +92,6 @@ public class Main {
     private static void testDeveloppement() {
         Etat etatInitial=new Etat(3,3,(byte)1);
 
-        //etatInitial.jouerCoup(new Coup(0));
-
         Noeud noeudRacineArbre = new Noeud(etatInitial);
         noeudRacineArbre.setUctTemp(1);
         Noeud fils1=new Noeud (noeudRacineArbre,new Coup(0));
@@ -111,32 +107,46 @@ public class Main {
         noeudSelection.developpement();
         Noeud noeudFils=noeudSelection.getPremierEnfant();
         System.out.println(noeudFils.getEtat());
-    }*/
-
+    }
 
     private static void testSimulation() {
         Etat etatInitial=new Etat(4,4,(byte)1);
 
         byte[][] tableau={{0,0,0,0},{2,2,2,0},{2,2,2,0},{2,2,2,0}};
         etatInitial.setTableau(tableau);
-        //etatInitial.jouerCoup(new Coup(0));
 
         Noeud noeudRacineArbre = new Noeud(etatInitial);
 
-        /*noeudRacineArbre.setUctTemp(1);
-        Noeud fils1=new Noeud (noeudRacineArbre,new Coup(0));
-        fils1.setUctTemp(1.1);
-        Noeud fils2=new Noeud (noeudRacineArbre,new Coup(1));
-        fils2.setUctTemp(1.5);
-        Noeud fils3=new Noeud (noeudRacineArbre,new Coup(2));
-        fils3.setUctTemp(1.3);
-        Noeud fils2_2=new Noeud (fils2,new Coup(1));
-        fils2_2.setUctTemp(1.7);*/
-
-        /*Noeud noeudSelection=noeudRacineArbre.selection();
-        noeudSelection.developpement();
-        Noeud noeudFils=noeudSelection.getPremierEnfant();*/
         int resultat=noeudRacineArbre.simulation();
         System.out.println(resultat);
-    }
+    }*/
+
+    /*private static void testBackPropagation() {
+        Etat etatInitial=new Etat(3,3,(byte)1);
+
+        Noeud noeudRacineArbre = new Noeud(etatInitial);
+        Noeud fils1=new Noeud (noeudRacineArbre,new Coup(0));
+        Noeud fils2=new Noeud (noeudRacineArbre,new Coup(1));
+        Noeud fils3=new Noeud (noeudRacineArbre,new Coup(2));
+        Noeud fils2_2=new Noeud (fils2,new Coup(1));
+
+        // Etape 1 : Selection
+        Noeud noeudFeuille=noeudRacineArbre.selection();
+
+        // Etape 2 : Développement
+        noeudFeuille.developpement();
+        Noeud noeudFils=noeudFeuille.getPremierEnfant();
+
+        // Etape 3 : Simulation
+        int resultatSimulation=noeudFils.simulation();
+
+        // Etape 4 : Backpropagation
+        noeudFils.backPropagation(resultatSimulation);
+
+        //affichageArbre(noeudRacineArbre);
+
+
+
+
+    }*/
 }

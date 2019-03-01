@@ -13,42 +13,46 @@ public class IA extends Joueur {
 
     @Override
     public void jouer(Jeu jeu) {
-        /*long dureeReflexion=1000;
+        long dureeReflexion=1000;
 
         long dateDebut=System.currentTimeMillis();
 
         Etat etat = jeu.getGrille().getEtat();
         this.noeudRacineArbre = new Noeud(etat);
-
+        int compteurBoucle = 1;
         while (System.currentTimeMillis()-dateDebut < dureeReflexion) {
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // IA Intelligent
-
+            System.out.println("Tour de boucle n°"+compteurBoucle+" :\n");
             // Etape 1 : Selection
             Noeud noeudFeuille=this.noeudRacineArbre.selection();
+            System.out.println("Etape 1 - Selection : Done");
 
             // Etape 2 : Développement
             noeudFeuille.developpement();
             Noeud noeudFils=noeudFeuille.getPremierEnfant();
+            System.out.println("Etape 2 - Développement : Done");
 
             // Etape 3 : Simulation
             // Etat.J1_GAGNE => 1
             // Etat.J2_GAGNE => 2
             // Etat.MATCH_NUL => 3
             int resultatSimulation=noeudFils.simulation();
-
+            System.out.println("Etape 3 - Simulation : Done");
             // Etape 4 : Backpropagation
             noeudFils.backPropagation(resultatSimulation);
+            System.out.println("Etape 4 - Backpropagation : Done\n");
+
+            compteurBoucle+=1;
         }
 
 
         // Etape 5 : Choix du coup à effectuer
         Coup coupAJouer=this.noeudRacineArbre.noeudEnfantUCTMax().getCoupAssocie();
-        etat.jouerCoup(coupAJouer);*/
+        etat.jouerCoup(coupAJouer);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-        // IA Aléatoire
-
+        /*// IA Aléatoire
         Etat etat=jeu.getGrille().getEtat();
         ArrayList<Coup> coupsPossibles=etat.coupsPossibles();
 
@@ -57,7 +61,7 @@ public class IA extends Joueur {
             int indiceCoup=rand.nextInt(coupsPossibles.size());
 
             etat.jouerCoup(coupsPossibles.get(indiceCoup));
-        }
+        }*/
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
