@@ -13,43 +13,53 @@ public class IA extends Joueur {
 
     @Override
     public void jouer(Jeu jeu) {
-        try {
-            Thread.sleep(100);
+        /*long dureeReflexion=1000;
 
+        long dateDebut=System.currentTimeMillis();
+
+        Etat etat = jeu.getGrille().getEtat();
+        this.noeudRacineArbre = new Noeud(etat);
+
+        while (System.currentTimeMillis()-dateDebut < dureeReflexion) {
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Rajouté (Marvin)
             // IA Intelligent
-            // Etat etat = jeu.getGrille().getEtat();
-            // this.noeudRacineArbre = new Noeud(etat);
-            // Il faudra faire la sélection, le développement, la simulation et la backpropagation sur noeudRacineArbre
 
             // Etape 1 : Selection
+            Noeud noeudFeuille=this.noeudRacineArbre.selection();
 
             // Etape 2 : Développement
+            noeudFeuille.developpement();
+            Noeud noeudFils=noeudFeuille.getPremierEnfant();
 
             // Etape 3 : Simulation
+            // Etat.J1_GAGNE => 1
+            // Etat.J2_GAGNE => 2
+            // Etat.MATCH_NUL => 3
+            int resultatSimulation=noeudFils.simulation();
 
             // Etape 4 : Backpropagation
-
-            // Etape 5 : Choix du coup à effectuer
-
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // IA Aléatoire
-
-            Etat etat=jeu.getGrille().getEtat();
-            ArrayList<Coup> coupsPossibles=etat.coupsPossibles();
-
-            if (coupsPossibles.size() > 0) {
-                Random rand=new Random();
-                int indiceCoup=rand.nextInt(coupsPossibles.size());
-
-                etat.jouerCoup(coupsPossibles.get(indiceCoup));
-            }
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        } catch (InterruptedException e) {
-            System.out.println("Erreur InterruptedException");
+            noeudFils.backPropagation(resultatSimulation);
         }
+
+
+        // Etape 5 : Choix du coup à effectuer
+        Coup coupAJouer=this.noeudRacineArbre.noeudEnfantUCTMax().getCoupAssocie();
+        etat.jouerCoup(coupAJouer);*/
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+        // IA Aléatoire
+
+        Etat etat=jeu.getGrille().getEtat();
+        ArrayList<Coup> coupsPossibles=etat.coupsPossibles();
+
+        if (coupsPossibles.size() > 0) {
+            Random rand=new Random();
+            int indiceCoup=rand.nextInt(coupsPossibles.size());
+
+            etat.jouerCoup(coupsPossibles.get(indiceCoup));
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     @Override

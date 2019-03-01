@@ -6,70 +6,130 @@ import java.util.Random;
 public class Noeud {
 
     private Noeud parent;
-    private ArrayList<Noeud> enfant;
+    private ArrayList<Noeud> enfants;
     private Etat etat;
     private int nbVictoires;
     private int nbParties;
-    private int UCT;
+    //Le coup que l'on a utilisé pour arriver à ce noued
+    private Coup coupAssocie;
 
-    ///////////////////////////////////////////////////////////////////
-    // Rajouté (Marvin)
-    // Correspond à la couleur du dernier pion posé sur le plateau. Vrai si de la couleur pikachu.
-    // Utile pour l'étape 4 de l'algorithme de Monte Carlo UCT (Backpropagation)
-    private boolean couleurPikachu;
-    ///////////////////////////////////////////////////////////////////
+   // private double uctTemp;
+
+    //La constante c utilisé dans le calcul de la valeur UCT du noeud
+    public static double c=Math.sqrt(2);
 
     public Noeud(Etat etat) {
         this.etat = new Etat(etat);
         this.nbVictoires = 0;
         this.nbParties = 0;
-        enfant = new ArrayList<>();
-
-        ///////////////////////////////////////////////////////////////////
-        // Rajouté (Marvin)
-        // Si le joueur qui doit jouer est le joueur 1 (Pikachu),
-        // alors le dernier pion a était posé par le joeur 2 (Rondoudou)
-        if(this.etat.getJoueur()==1)
-        {
-            this.couleurPikachu = false;
-        }
-        else
-        {
-            this.couleurPikachu = true;
-        }
-        ///////////////////////////////////////////////////////////////////
+        this.enfants = new ArrayList<>();
+        this.coupAssocie=null;
     }
 
     public Noeud(Noeud noeudParent, Coup coup){
         this.parent=noeudParent;
+        this.coupAssocie=coup;
+        this.parent.getEnfants().add(this);
         Etat etat=new Etat(this.parent.getEtat());
-        etat.jouerCoup(coup);
+        etat.jouerCoup(this.coupAssocie);
         this.etat=etat;
         this.nbVictoires = 0;
         this.nbParties = 0;
-        enfant = new ArrayList<>();
+        this.enfants = new ArrayList<>();
+
     }
 
     // Etape 1 : Selection
     // Depuis la racine, on selectionne successivement des enfants jusqu'à atteindre une feuille.
     // Le choix des enfants est déterminé par la valeur UCT des noeuds (On choisi le noeud avec l'UCT le plus grand)
+    // et on ne descend pas dans un noeud dont l'UCT est plus petit
+    // L'UCT est calculé dynamiquement à chaque fois que l'on descend dans l'arbre.
     public Noeud selection() {
-        Noeud noeudSelectionne = null;
+        Noeud noeudSelectionne = this;
 
-        // TODO
+        if (noeudSelectionne.estNoeudFeuille()) {
+            return noeudSelectionne;
+        } else {
+            Noeud noeudActuel=noeudSelectionne;
+            double uctActuel=noeudActuel.calculeUCT();
+
+            noeudSelectionne=this.noeudEnfantUCTMax();
+
+            if (noeudSelectionne.calculeUCT() > uctActuel) {
+                noeudSelectionne=noeudSelectionne.selection();
+            } else {
+                return noeudActuel;
+            }
+        }
 
         return noeudSelectionne;
     }
 
+    // Sous méthode utilsé dans l'étape 1 de UCT par la méthode sélection ci-dessus
+    // Return parmi les enfants du noeud courant, le noeud avec le plus grand UCT
+    public Noeud noeudEnfantUCTMax() {
+        if (this.estNoeudFeuille() == true) {
+            System.err.println("Erreur le noeud n'a pas d'enfant");
+            return null;
+        } else {
+            double maxUCT=0.0;
+            int maxIndice=-1;
+
+            for (int i=0;i<this.enfants.size();i++) {
+                double uctCourant=this.enfants.get(i).calculeUCT();
+                if (uctCourant > maxUCT) {
+                    maxUCT=uctCourant;
+                    maxIndice=i;
+                }
+            }
+            return this.enfants.get(maxIndice);
+        }
+    }
+
+    // Sous méthode utilsé dans l'étape 1 de UCT par la méthode sélection ci-dessus
+    // Permet de calculer la valeur UCT du noeud courant (Le noeud "this")
+    // Calcule de la valeur UCT du noeud courant en fonction des attributs nbParties et nbVictoires
+    // du noeud courant et du noeud pere au noeud courant
+    public double calculeUCT()
+    {
+        //return this.uctTemp;
+        if (estNoeudRacine()) {
+            return 1;
+        } else {
+            double UCT = 0.0;
+            double pourcentageVictoire=1.0*nbVictoires/nbParties;
+
+            if (!estNoeudHumain()) {
+                pourcentageVictoire=-pourcentageVictoire;
+            }
+            UCT=pourcentageVictoire+c* Math.sqrt(Math.log(this.parent.getNbParties() / Math.log(this.nbParties)));
+            return UCT;
+        }
+    }
+
+    /*public double getUctTemp() {
+        return uctTemp;
+    }
+
+    public void setUctTemp(double uctTemp) {
+        this.uctTemp = uctTemp;
+    }*/
+
     // Etape 2 : Développement
-    // A utiliser uniquement si l'état du noeud actuel n'est pas un état finale.
-    // Retourne un noeud enfant ayant +1 jeton sur la grille de son Etat.
-    public Noeud developpement() {
-        Noeud noeudEnfant = null;
+    // A utiliser uniquement si l'état du noeud actuel n'est pas un état final.
+    // Crée un noeud enfant au noeud actuel
+    public void developpement() {
+        ArrayList<Coup> coupsPossibles=this.etat.coupsPossibles();
 
-        // TODO
+        if (coupsPossibles.size() > 0 && this.etat.testFin() == Etat.PARTIE_EN_COURS) {
+            Random rand=new Random();
+            int indiceCoup=rand.nextInt(coupsPossibles.size());
+            new Noeud(this, coupsPossibles.get(indiceCoup));
+        }
+        else {
+            System.err.println("Errer : Aucun coup possible car le noeud représente un état finale");
+        }
 
-        return noeudEnfant;
     }
 
     // TODO (Fonction simulation() a tester)
@@ -96,46 +156,99 @@ public class Noeud {
     // Etape 4 : Backpropagation
     // Utilise le résultat de la simulation effectué au préalable pour mettre à jour les attributs nbVictoire et nbParties
     // du noeud courant et des noeuds entre la racine et le noeud courant.
-    // Met ensuite  à jour les informations la valeur UCT du noeud courant et des noeuds entre la racine et le noeud courant.
     // Le Noeud Courant correspond au noeud feuille sur lequel on a effectué la simulation.
     public void backPropagation(int resultatSimulation){
 
+
+        //true noeud humain
+        //false noeud IA
+        boolean noeudDuBasGagnant=false;
+
         // Partie 1 : Mettre à jour pour le noeud courant les attributs nbParties et nbVictoires
         this.nbParties += 1;
-        if(resultatSimulation == this.etat.J1_GAGNE)
+        if(resultatSimulation == Etat.J1_GAGNE && this.estNoeudHumain())
         {
             this.nbVictoires += 1;
+            noeudDuBasGagnant=true;
+        } else if(resultatSimulation == Etat.J2_GAGNE && !this.estNoeudHumain()) {
+            this.nbVictoires += 1;
+            noeudDuBasGagnant=true;
         }
+
+
 
         // Partie 2 : Mettre à jour pour tous les noeuds entre la racine et le noeud courant
         // les attributs nbParties et nbVictoires
-        // TODO
 
-        // Partie 3 : Mettre à jour la valeur UCT du noeud courant
-        // TODO
+        Noeud noeudCourant=this;
 
-        // Partie 4 : Mettre à jour la valeur UCT pour tous les noeuds entre la racine et le noeud courant
-        // TODO
+        //true noeud humain
+        //false noeud IA
+        boolean typeNoeud=this.estNoeudHumain();
+
+        while (!noeudCourant.estNoeudRacine()) {
+            noeudCourant=this.parent;
+            noeudCourant.setNbParties(noeudCourant.getNbParties()+1);
+
+            //Si le noeud du bas est gagant et le noeud courant est un noeud du même type
+            if(noeudDuBasGagnant && (typeNoeud == noeudCourant.estNoeudHumain())) {
+                noeudCourant.setNbVictoires(noeudCourant.getNbVictoires()+1);
+            //Si le noeud du bas est perdant et que le noeud courant est un noeud du type opposé et que ce n'est pas une égalité
+            } else if (!noeudDuBasGagnant && (typeNoeud == !noeudCourant.estNoeudHumain()) && (resultatSimulation!= Etat.MATCH_NUL)) {
+                noeudCourant.setNbVictoires(noeudCourant.getNbVictoires()+1);
+            }
+        }
+
+
     }
 
-    // Sous méthode utilsé dans l'étape 4 de UCT par la méthode backPropagation ci-dessus
-    // Permet de calculer la valeur UCT du noeud courant (Le noeud "this")
-    public int calculeUCT()
-    {
-        int UCT = 0;
-
-        // Calcule de la valeur UCT du noeud courant en fonction des attributs nbParties et nbVictoires
-        // du noeud courant et du noeud pere au noeud courant
-        //TODO
-
-        return UCT;
+    public Noeud getPremierEnfant () {
+        if (this.enfants.size() > 0) {
+            return this.enfants.get(0);
+        } else {
+            System.err.println("Erreur pas d'enfant pour ce noeud !");
+            return null;
+        }
     }
 
+    public Coup getCoupAssocie() {
+        return coupAssocie;
+    }
+
+    public ArrayList<Noeud> getEnfants() {
+        return enfants;
+    }
+
+    public void setNbVictoires(int nbVictoires) {
+        this.nbVictoires = nbVictoires;
+    }
+
+    public void setNbParties(int nbParties) {
+        this.nbParties = nbParties;
+    }
+
+    public int getNbVictoires() {
+        return nbVictoires;
+    }
+
+    public int getNbParties() {
+        return nbParties;
+    }
+
+    // Utile pour l'étape 4 de l'algorithme de Monte Carlo UCT (Backpropagation)
     //Est-ce un noeud joueur ou un noeud IA ?
     //true joueur
     //false IA
     public boolean estNoeudHumain() {
         return (this.etat.getJoueur() == 1);
+    }
+
+    public boolean estNoeudFeuille() {
+        return (this.enfants.size() == 0);
+    }
+
+    public boolean estNoeudRacine() {
+        return (this.parent == null);
     }
 
     public Etat getEtat() {

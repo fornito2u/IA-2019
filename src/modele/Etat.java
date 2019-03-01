@@ -51,6 +51,11 @@ public class Etat extends Observable {
             }
         }
         dernierCoup=new Coup(etat.getDernierCoup());
+        joueur=etat.getJoueur();
+    }
+
+    public void setTableau(byte[][] tableau) {
+        this.tableau = tableau;
     }
 
     public byte[][] getTableau() {
@@ -290,7 +295,7 @@ public class Etat extends Observable {
             //On regarde si il y a un match nul
             for (int i=0;i<tableau.length;i++) {
                 for (int j=0;j<tableau[0].length;j++) {
-                    if (tableau[i][j] != 0) {
+                    if (tableau[i][j] == 0) {
                         return PARTIE_EN_COURS;
                     }
                 }
