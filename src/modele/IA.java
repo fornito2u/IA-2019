@@ -13,7 +13,7 @@ public class IA extends Joueur {
 
     @Override
     public void jouer(Jeu jeu) {
-        long dureeReflexion=1000;
+        long dureeReflexion=2000;
 
         long dateDebut=System.currentTimeMillis();
 
@@ -74,10 +74,18 @@ public class IA extends Joueur {
 
 
             // Etape 5 : Choix du coup à effectuer
-            Coup coupAJouer = this.noeudRacineArbre.noeudEnfantUCTMax().getCoupAssocie();
+
+            //Max
+            Noeud noeudChoisi=this.noeudRacineArbre.noeudEnfantUCTMax();
+
+            //Robuste
+            //Noeud noeudChoisi=this.noeudRacineArbre.noeudEnfantRobuste();
+
+
+            Coup coupAJouer = noeudChoisi.getCoupAssocie();
             etat.jouerCoup(coupAJouer);
             System.out.println("Nombre de simulation : " + compteurBoucle + "\n");
-            System.out.println(this.noeudRacineArbre);
+            System.out.println("Pourcentage de victoire de l'IA : "+(1.0*noeudChoisi.getNbVictoires()/noeudChoisi.getNbParties())*100+"%");
         }
 
 

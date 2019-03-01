@@ -12,6 +12,7 @@ public class Noeud {
     private int nbParties;
     //Le coup que l'on a utilisé pour arriver à ce noued
     private Coup coupAssocie;
+    private double uct=0;
 
    // private double uctTemp;
 
@@ -77,8 +78,28 @@ public class Noeud {
 
             for (int i=0;i<this.enfants.size();i++) {
                 double uctCourant=this.enfants.get(i).calculeUCT();
-                if (uctCourant >= maxUCT) {
+                if (uctCourant > maxUCT) {
                     maxUCT=uctCourant;
+                    maxIndice=i;
+                }
+            }
+            return this.enfants.get(maxIndice);
+        }
+    }
+
+    // Return parmi les enfants du noeud courant, le noeud avec le plus grand nombre de simulations
+    public Noeud noeudEnfantRobuste() {
+        if (this.estNoeudFeuille() == true) {
+            System.err.println("Erreur le noeud n'a pas d'enfant");
+            return null;
+        } else {
+            double maxSimulations=this.enfants.get(0).getNbParties();
+            int maxIndice=0;
+
+            for (int i=0;i<this.enfants.size();i++) {
+                double simulationsCourant=this.enfants.get(i).getNbParties();
+                if (simulationsCourant > maxSimulations) {
+                    maxSimulations=simulationsCourant;
                     maxIndice=i;
                 }
             }
@@ -105,6 +126,7 @@ public class Noeud {
                 pourcentageVictoire=1.0*nbVictoires/nbParties;
             }
             UCT=pourcentageVictoire+c* Math.sqrt(Math.log(this.parent.getNbParties()) / this.nbParties);
+            this.uct=UCT;
             return UCT;
         }
     }
