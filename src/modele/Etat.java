@@ -29,6 +29,9 @@ public class Etat extends Observable {
      * Le dernier coup joué
      */
     private Coup dernierCoup;
+    private int nbLigne;
+
+    private int nbColonne;
 
     public Etat (int nbLigne, int nbColonne, byte jo) {
         joueur=jo;
@@ -39,6 +42,8 @@ public class Etat extends Observable {
             }
         }
         dernierCoup=new Coup (-1);
+        this.nbLigne = nbLigne;
+        this.nbColonne = nbColonne;
     }
 
     public Etat (Etat etat) {
@@ -305,6 +310,14 @@ public class Etat extends Observable {
 
 
 
+    }
+
+    public int getNbLigne() {
+        return nbLigne;
+    }
+
+    public int getNbColonne() {
+        return nbColonne;
     }
 
     private int retourneGagnant(byte dernierJoueur) {

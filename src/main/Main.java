@@ -50,7 +50,7 @@ public class Main {
                     return nbJoueurHumain;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Sélection invalide");
+                System.exit(1);
             }
             JOptionPane.showMessageDialog(null,messageInvalide,entreeInvalide,JOptionPane.WARNING_MESSAGE);
         }

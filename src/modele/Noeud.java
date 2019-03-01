@@ -127,12 +127,13 @@ public class Noeud {
             new Noeud(this, coupsPossibles.get(indiceCoup));
         }
         else {
-            System.err.println("Errer : Aucun coup possible car le noeud représente un état finale");
+            System.err.println("Erreur : Aucun coup possible car le noeud représente un état final");
+
         }
 
     }
 
-    // TODO (Fonction simulation() a tester)
+
     // Etape 3 : Simulation
     // Simulation la fin d'une partie à partir du noeud courant
     // Retourne le résultat de la partie sous la forme d'un entier respectant le code suivant :
@@ -189,7 +190,7 @@ public class Noeud {
         boolean typeNoeud=this.estNoeudHumain();
 
         while (!noeudCourant.estNoeudRacine()) {
-            noeudCourant=this.parent;
+            noeudCourant=noeudCourant.getParent();
             noeudCourant.setNbParties(noeudCourant.getNbParties()+1);
 
             //Si le noeud du bas est gagant et le noeud courant est un noeud du même type
@@ -201,8 +202,6 @@ public class Noeud {
             }
         }
         System.out.println("Etape 4 - Backpropagation - Partie 2 : Done");
-
-
     }
 
     public Noeud getPremierEnfant () {
@@ -212,6 +211,10 @@ public class Noeud {
             System.err.println("Erreur pas d'enfant pour ce noeud !");
             return null;
         }
+    }
+
+    public Noeud getParent() {
+        return parent;
     }
 
     public Coup getCoupAssocie() {
