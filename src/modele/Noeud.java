@@ -72,12 +72,12 @@ public class Noeud {
             System.err.println("Erreur le noeud n'a pas d'enfant");
             return null;
         } else {
-            double maxUCT=0.0;
-            int maxIndice=-1;
+            double maxUCT=this.enfants.get(0).calculeUCT();
+            int maxIndice=0;
 
             for (int i=0;i<this.enfants.size();i++) {
                 double uctCourant=this.enfants.get(i).calculeUCT();
-                if (uctCourant > maxUCT) {
+                if (uctCourant >= maxUCT) {
                     maxUCT=uctCourant;
                     maxIndice=i;
                 }
@@ -97,12 +97,14 @@ public class Noeud {
             return 1;
         } else {
             double UCT = 0.0;
-            double pourcentageVictoire=1.0*nbVictoires/nbParties;
 
-            if (!estNoeudHumain()) {
-                pourcentageVictoire=-pourcentageVictoire;
+            double pourcentageVictoire;
+            if (nbParties == 0) {
+                return 0;
+            } else {
+                pourcentageVictoire=1.0*nbVictoires/nbParties;
             }
-            UCT=pourcentageVictoire+c* Math.sqrt(Math.log(this.parent.getNbParties() / Math.log(this.nbParties)));
+            UCT=pourcentageVictoire+c* Math.sqrt(Math.log(this.parent.getNbParties()) / this.nbParties);
             return UCT;
         }
     }
@@ -179,7 +181,6 @@ public class Noeud {
             this.nbVictoires += 1;
             noeudDuBasGagnant=true;
         }
-        System.out.println("Etape 4 - Backpropagation - Partie 1 : Done");
 
         // Partie 2 : Mettre à jour pour tous les noeuds entre la racine et le noeud courant les attributs nbParties et nbVictoires
 
@@ -201,7 +202,6 @@ public class Noeud {
                 noeudCourant.setNbVictoires(noeudCourant.getNbVictoires()+1);
             }
         }
-        System.out.println("Etape 4 - Backpropagation - Partie 2 : Done");
     }
 
     public Noeud getPremierEnfant () {

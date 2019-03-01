@@ -144,9 +144,5 @@ public class Main {
         noeudFils.backPropagation(resultatSimulation);
 
         //affichageArbre(noeudRacineArbre);
-
-
-
-
     }*/
 }
