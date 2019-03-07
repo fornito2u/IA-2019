@@ -87,6 +87,25 @@ public class Noeud {
         }
     }
 
+    public Noeud noeudEnfantMeilleurMouvement() {
+        if (this.estNoeudFeuille() == true) {
+            System.err.println("Erreur le noeud n'a pas d'enfant");
+            return null;
+        } else {
+            double probaMax=1.0*this.enfants.get(0).getNbVictoires()/this.enfants.get(0).getNbParties();
+            int maxIndice=0;
+
+            for (int i=0;i<this.enfants.size();i++) {
+                double probaCourante=1.0*this.enfants.get(i).getNbVictoires()/this.enfants.get(i).getNbParties();
+                if (probaCourante > probaMax) {
+                    probaMax=probaCourante;
+                    maxIndice=i;
+                }
+            }
+            return this.enfants.get(maxIndice);
+        }
+    }
+
     // Return parmi les enfants du noeud courant, le noeud avec le plus grand nombre de simulations
     public Noeud noeudEnfantRobuste() {
         if (this.estNoeudFeuille() == true) {
@@ -115,17 +134,25 @@ public class Noeud {
     {
         //return this.uctTemp;
         if (estNoeudRacine()) {
+            this.uct=1;
             return 1;
         } else {
             double UCT = 0.0;
 
             double pourcentageVictoire;
             if (nbParties == 0) {
-                return 0;
+                System.out.println("YOLO");
+                this.uct=1;
+                return 1;
             } else {
                 pourcentageVictoire=1.0*nbVictoires/nbParties;
             }
-            UCT=pourcentageVictoire+c* Math.sqrt(Math.log(this.parent.getNbParties()) / this.nbParties);
+
+            if (estNoeudHumain()) {
+                UCT=pourcentageVictoire+c* Math.sqrt(Math.log(this.parent.getNbParties()) / this.nbParties);
+            } else {
+                UCT=-pourcentageVictoire+c* Math.sqrt(Math.log(this.parent.getNbParties()) / this.nbParties);
+            }
             this.uct=UCT;
             return UCT;
         }
@@ -142,17 +169,17 @@ public class Noeud {
     // Etape 2 : Développement
     // A utiliser uniquement si l'état du noeud actuel n'est pas un état final.
     // Crée un noeud enfant au noeud actuel
-    public void developpement() {
+    public Noeud developpement() {
         ArrayList<Coup> coupsPossibles=this.etat.coupsPossibles();
 
         if (coupsPossibles.size() > 0 && this.etat.testFin() == Etat.PARTIE_EN_COURS) {
             Random rand=new Random();
             int indiceCoup=rand.nextInt(coupsPossibles.size());
-            new Noeud(this, coupsPossibles.get(indiceCoup));
-        }
-        else {
-            System.err.println("Erreur : Aucun coup possible car le noeud représente un état final");
-
+            Noeud noeufils=new Noeud(this, coupsPossibles.get(indiceCoup));
+            return noeufils;
+        } else {
+            //Aucun coup possible car le noeud représente un état final"
+            return this;
         }
 
     }
@@ -188,40 +215,19 @@ public class Noeud {
     //    - Si le noeud courant perd, les noeuds du type opposé au noeud courant (jeton opposé sur le plateau) ont leur attributs nbVictoires augmenté
     public void backPropagation(int resultatSimulation){
 
-        // Partie 1 : Mettre à jour pour le noeud courant les attributs nbParties et nbVictoires
-
-        //true noeud du bas gagnant
-        //false noeud du bas perdant
-        boolean noeudDuBasGagnant=false;
-
-        this.nbParties += 1;
-        if(resultatSimulation == Etat.J1_GAGNE && this.estNoeudHumain())
-        {
-            this.nbVictoires += 1;
-            noeudDuBasGagnant=true;
-        } else if(resultatSimulation == Etat.J2_GAGNE && !this.estNoeudHumain()) {
-            this.nbVictoires += 1;
-            noeudDuBasGagnant=true;
-        }
-
-        // Partie 2 : Mettre à jour pour tous les noeuds entre la racine et le noeud courant les attributs nbParties et nbVictoires
+        // Mettre à jour pour tous les noeuds entre la racine et le noeud courant les attributs nbParties et nbVictoires
 
         Noeud noeudCourant=this;
-
-        //true noeud humain
-        //false noeud IA
-        boolean typeNoeud=this.estNoeudHumain();
-
-        while (!noeudCourant.estNoeudRacine()) {
-            noeudCourant=noeudCourant.getParent();
+        //Tant que le noeud n'est pas un noeud racine
+        while (true) {
             noeudCourant.setNbParties(noeudCourant.getNbParties()+1);
-
-            //Si le noeud du bas est gagant et le noeud courant est un noeud du même type
-            if(noeudDuBasGagnant && (typeNoeud == noeudCourant.estNoeudHumain())) {
+            if(resultatSimulation == Etat.J2_GAGNE) {
                 noeudCourant.setNbVictoires(noeudCourant.getNbVictoires()+1);
-            //Si le noeud du bas est perdant et que le noeud courant est un noeud du type opposé et que ce n'est pas une égalité
-            } else if (!noeudDuBasGagnant && (typeNoeud == !noeudCourant.estNoeudHumain()) && (resultatSimulation!= Etat.MATCH_NUL)) {
-                noeudCourant.setNbVictoires(noeudCourant.getNbVictoires()+1);
+            }
+            if (noeudCourant.estNoeudRacine()) {
+                break;
+            } else {
+                noeudCourant=noeudCourant.getParent();
             }
         }
     }

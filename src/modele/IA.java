@@ -13,7 +13,7 @@ public class IA extends Joueur {
 
     @Override
     public void jouer(Jeu jeu) {
-        long dureeReflexion=2000;
+        long dureeReflexion=3000;
 
         long dateDebut=System.currentTimeMillis();
 
@@ -49,13 +49,13 @@ public class IA extends Joueur {
 
                 // Etape 2 : Développement
 
-                noeudFeuille.developpement();
-                Noeud noeudFils;
+                Noeud noeudFils=noeudFeuille.developpement();
+                /*Noeud noeudFils;
                 if (noeudFeuille.getEnfants().size() > 0) {
                     noeudFils = noeudFeuille.getPremierEnfant();
                 } else {
                     noeudFils = noeudFeuille;
-                }
+                }*/
 
                // System.out.println("Etape 2 - Développement : Done");
 
@@ -76,7 +76,7 @@ public class IA extends Joueur {
             // Etape 5 : Choix du coup à effectuer
 
             //Max
-            Noeud noeudChoisi=this.noeudRacineArbre.noeudEnfantUCTMax();
+            Noeud noeudChoisi=this.noeudRacineArbre.noeudEnfantMeilleurMouvement();
 
             //Robuste
             //Noeud noeudChoisi=this.noeudRacineArbre.noeudEnfantRobuste();
